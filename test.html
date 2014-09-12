@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>Proxy test</title>
+
+        <script type="text/javascript">
+            function soapTest() {
+                var symbol = "MSFT";
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "proxy.php?endpoint=" + encodeURIComponent('http://www.webservicex.net/stockquote.asmx?op=GetQuote'),true);
+
+                xmlhttp.onreadystatechange=function() {
+                    if (xmlhttp.readyState == 4) {
+                        alert(xmlhttp.responseText);
+                    }
+                }
+
+                xmlhttp.setRequestHeader("SOAPAction", "http://www.webserviceX.NET/GetQuote");
+                xmlhttp.setRequestHeader("Content-Type", "text/xml");
+                var xml = '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetQuote xmlns="http://www.webserviceX.NET/"><symbol>' + symbol + '</symbol></GetQuote></soap:Body></soap:Envelope>';
+                xmlhttp.send(xml);
+            }
+        </script>
+    </head>
+
+    <body>
+        <h1>GET request: parameters sent separately from the &lt;endpoint&gt; parameter</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://httpbin.org/get">
+            <input type="hidden", name="testType", value="GET: excluded from endoint">
+            <input name="name", value="John Doe"><br>
+            <input name="email", value="john@doe.com"><br>
+            <textarea name="info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim mi at lobortis dignissim. Praesent dapibus accumsan velit, non gravida felis euismod et. Morbi ultricies odio sapien, sit amet iaculis nisi consequat sed. Nam urna urna, suscipit id leo ut, fermentum hendrerit diam. In auctor tempor augue, quis ultricies nisi molestie sed. Vestibulum eu erat commodo, pellentesque arcu ac, eleifend turpis. Pellentesque porttitor egestas viverra. Sed fermentum libero sit amet mollis rutrum. Proin quis nisi at massa porta condimentum. Aenean commodo sem ut leo lacinia, quis egestas urna egestas. Suspendisse rhoncus leo venenatis, interdum arcu non, ultrices urna. Cras quam ligula, tempus ac consequat et, dignissim sit amet mauris. Nam eu diam in erat tincidunt ultricies. Quisque id turpis mauris. Cras id dignissim lacus, eget congue ante.</textarea><br>
+            <input type="submit">
+        </form>
+
+
+        <h1>GET request: parameters are included in the &lt;endpoint&gt; parameter</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://httpbin.org/get?testType=GET%3A%20included%20in%20endoint&amp;name=John+Doe&amp;email=john%40doe.com&amp;info=Lorem+ipsum+dolor+sit+amet%2C+consectetur+adipiscing+elit.+Ut+dignissim+mi+at+lobortis+dignissim.+Praesent+dapibus+accumsan+velit%2C+non+gravida+felis+euismod+et.+Morbi+ultricies+odio+sapien%2C+sit+amet+iaculis+nisi+consequat+sed.+Nam+urna+urna%2C+suscipit+id+leo+ut%2C+fermentum+hendrerit+diam.+In+auctor+tempor+augue%2C+quis+ultricies+nisi+molestie+sed.+Vestibulum+eu+erat+commodo%2C+pellentesque+arcu+ac%2C+eleifend+turpis.+Pellentesque+porttitor+egestas+viverra.+Sed+fermentum+libero+sit+amet+mollis+rutrum.+Proin+quis+nisi+at+massa+porta+condimentum.+Aenean+commodo+sem+ut+leo+lacinia%2C+quis+egestas+urna+egestas.+Suspendisse+rhoncus+leo+venenatis%2C+interdum+arcu+non%2C+ultrices+urna.+Cras+quam+ligula%2C+tempus+ac+consequat+et%2C+dignissim+sit+amet+mauris.+Nam+eu+diam+in+erat+tincidunt+ultricies.+Quisque+id+turpis+mauris.+Cras+id+dignissim+lacus%2C+eget+congue+ante.">
+            <input type="submit">
+        </form>
+
+        <h1>GET request: parameters are mixed (both included in the &lt;endpoint&gt; parameter and sent separately)</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://httpbin.org/get?testType=GET%3A%20mixed%20in%20endoint&amp;name=John+Doe&amp;email=john%40doe.com">
+            <textarea name="info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim mi at lobortis dignissim. Praesent dapibus accumsan velit, non gravida felis euismod et. Morbi ultricies odio sapien, sit amet iaculis nisi consequat sed. Nam urna urna, suscipit id leo ut, fermentum hendrerit diam. In auctor tempor augue, quis ultricies nisi molestie sed. Vestibulum eu erat commodo, pellentesque arcu ac, eleifend turpis. Pellentesque porttitor egestas viverra. Sed fermentum libero sit amet mollis rutrum. Proin quis nisi at massa porta condimentum. Aenean commodo sem ut leo lacinia, quis egestas urna egestas. Suspendisse rhoncus leo venenatis, interdum arcu non, ultrices urna. Cras quam ligula, tempus ac consequat et, dignissim sit amet mauris. Nam eu diam in erat tincidunt ultricies. Quisque id turpis mauris. Cras id dignissim lacus, eget congue ante.</textarea><br>
+            <input type="submit">
+        </form>
+
+        <h1>GET request: Basic Auth (user: test / pass: test)</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://httpbin.org/basic-auth/test/test">
+            <input type="hidden", name="testType", value="GET: Basic Auth">
+            <input type="submit">
+        </form>
+
+        <h1>GET request: Gzipped content</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://httpbin.org/gzip">
+            <input type="hidden", name="testType", value="GET: GZipped">
+            <input type="submit">
+        </form>
+
+        <h1>GET request: PNG file</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://placehold.it/1200x800.png&amp;text=This+is+a+dummy+PNG+file">
+            <input type="submit">
+        </form>
+
+        <h1>GET request: JPEG file</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://placehold.it/1200x800.jpg&amp;text=This+is+a+dummy+JPEG+file">
+            <input type="submit">
+        </form>
+
+        <h1>GET request: PDF file</h1>
+        <form action="proxy.php" method="GET">
+            <input type="hidden", name="endpoint", value="http://www.phoca.cz/demo/phocadownload/phocapdf-demo.pdf">
+            <input type="submit">
+        </form>
+
+        <h1>POST request: application/x-www-form-urlencoded</h1>
+        <form action="proxy.php?endpoint=http://httpbin.org/post" method="POST" enctype="application/x-www-form-urlencoded">
+            <input type="hidden", name="testType", value="POST: application/x-www-form-urlencoded">
+            <input name="name", value="John Doe"><br>
+            <input name="email", value="john@doe.com"><br>
+            <textarea name="info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim mi at lobortis dignissim. Praesent dapibus accumsan velit, non gravida felis euismod et. Morbi ultricies odio sapien, sit amet iaculis nisi consequat sed. Nam urna urna, suscipit id leo ut, fermentum hendrerit diam. In auctor tempor augue, quis ultricies nisi molestie sed. Vestibulum eu erat commodo, pellentesque arcu ac, eleifend turpis. Pellentesque porttitor egestas viverra. Sed fermentum libero sit amet mollis rutrum. Proin quis nisi at massa porta condimentum. Aenean commodo sem ut leo lacinia, quis egestas urna egestas. Suspendisse rhoncus leo venenatis, interdum arcu non, ultrices urna. Cras quam ligula, tempus ac consequat et, dignissim sit amet mauris. Nam eu diam in erat tincidunt ultricies. Quisque id turpis mauris. Cras id dignissim lacus, eget congue ante.</textarea><br>
+            <input type="submit">
+        </form>
+
+        <h1>POST request: multipart/form-data</h1>
+        <form action="proxy.php?endpoint=http://httpbin.org/post" method="POST" enctype="multipart/form-data">
+            <input type="hidden", name="testType", value="POST: multipart/form-data">
+            <input name="name", value="John Doe"><br>
+            <input name="email", value="john@doe.com"><br>
+            <textarea name="info">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dignissim mi at lobortis dignissim. Praesent dapibus accumsan velit, non gravida felis euismod et. Morbi ultricies odio sapien, sit amet iaculis nisi consequat sed. Nam urna urna, suscipit id leo ut, fermentum hendrerit diam. In auctor tempor augue, quis ultricies nisi molestie sed. Vestibulum eu erat commodo, pellentesque arcu ac, eleifend turpis. Pellentesque porttitor egestas viverra. Sed fermentum libero sit amet mollis rutrum. Proin quis nisi at massa porta condimentum. Aenean commodo sem ut leo lacinia, quis egestas urna egestas. Suspendisse rhoncus leo venenatis, interdum arcu non, ultrices urna. Cras quam ligula, tempus ac consequat et, dignissim sit amet mauris. Nam eu diam in erat tincidunt ultricies. Quisque id turpis mauris. Cras id dignissim lacus, eget congue ante.</textarea><br>
+            <input type="submit">
+        </form>
+
+        <h1>POST request: SOAP</h1>
+        <button onclick="soapTest();">Submit</button>
+    </body>
+</html>
