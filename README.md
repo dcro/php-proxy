@@ -7,7 +7,7 @@ The proxy endpoint URL should be specified in the `GET` or `POST` parameters as 
 
 The proxy forwards the original request to the endpoint URL and returns the response back to the original caller.
 
-Currently only GET and POST requests are supported. On HEAD, PUT, or DELETE requests, the proxy will return a `400 Bad Request` response.
+Currently only `GET` and `POST` requests are supported. On `HEAD`, `PUT`, or `DELETE` requests, the proxy will return a `400 Bad Request` response.
 
 If a request fails because of a CURL error (endpoint unavailable, network is down, etc.) the proxy responds with a `502 Bad Gateway` status.
 
